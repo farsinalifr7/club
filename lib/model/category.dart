@@ -1,0 +1,15 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:flutter/material.dart';
+
+class Category1 {
+  final Icon icon;
+  final String name;
+  final Color color;
+  final String description;
+  Category1({
+    required this.icon,
+    required this.name,
+    required this.color,
+    required this.description,
+  });
+}

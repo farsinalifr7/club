@@ -38,6 +38,7 @@ dependencies:
   cupertino_icons: ^1.0.8
   collection: ^1.18.0
   upgrade: ^0.0.8
+  google_fonts: ^4.0.4
 
 dev_dependencies:
   flutter_test:
