@@ -1,22 +1,20 @@
-import 'package:club/model/category.dart';
 import 'package:club/model/droweritem.dart';
-import 'package:club/model/main_member_model.dart';
+import 'package:club/model/user_model.dart';
 import 'package:club/pages/add_user.dart';
 import 'package:club/pages/intro_page.dart';
+import 'package:club/pages/settings.dart';
 import 'package:club/pages/show_members.dart';
-import 'package:flutter/foundation.dart';
+import 'package:club/pages/userinfo_add.dart';
+import 'package:club/provider/club_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 class HomePage extends StatelessWidget {
   HomePage({super.key});
+
   List<Droweritem> droweritems = [];
 
-  List<MainMember> mainmembers = [
-    MainMember(name: "Rashid", number: "78342322"),
-    MainMember(name: "Sahil", number: "89433454"),
-    MainMember(name: "Ashique", number: "667543534"),
-  ];
   List<Color> colors = [
     Colors.deepPurple,
     Colors.purple,
@@ -25,47 +23,10 @@ class HomePage extends StatelessWidget {
     Colors.grey,
     Colors.indigo,
   ];
+
   @override
   Widget build(BuildContext context) {
     final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
-    List<Category1> items = [
-      Category1(
-          icon: const Icon(
-            Icons.show_chart_outlined,
-            color: Colors.purple,
-            size: 30,
-          ),
-          name: "Show Members",
-          color: Colors.purple,
-          description: "Total members 13"),
-      Category1(
-          icon: const Icon(
-            Icons.add_outlined,
-            color: Colors.teal,
-            size: 30,
-          ),
-          name: "Add Member",
-          color: Colors.teal,
-          description: "Admin only"),
-      Category1(
-          icon: const Icon(
-            Icons.edit_outlined,
-            color: Colors.deepPurple,
-            size: 30,
-          ),
-          name: "Edit Details",
-          color: Colors.deepPurple,
-          description: "Admin only"),
-      Category1(
-          icon: const Icon(
-            Icons.settings_outlined,
-            color: Colors.blueGrey,
-            size: 30,
-          ),
-          name: "Settings",
-          color: Colors.blueGrey,
-          description: ""),
-    ];
 
     return Scaffold(
         drawer: Drawer(
@@ -84,6 +45,10 @@ class HomePage extends StatelessWidget {
               ),
               const Divider(),
               ListTile(
+                onTap: () {
+                  Navigator.pushReplacement(context,
+                      MaterialPageRoute(builder: (context) => HomePage()));
+                },
                 leading: const Icon(
                   Icons.home,
                   color: Colors.black,
@@ -111,6 +76,69 @@ class HomePage extends StatelessWidget {
                 ),
                 title: Text(
                   "Intro Page",
+                  style: GoogleFonts.aleo(
+                    textStyle: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.black),
+                  ),
+                ),
+              ),
+              ListTile(
+                onTap: () {
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const MembersInfo(
+                                editorNot: false,
+                              )));
+                },
+                leading: const Icon(
+                  Icons.show_chart,
+                  color: Colors.black,
+                ),
+                title: Text(
+                  "Show Members",
+                  style: GoogleFonts.aleo(
+                    textStyle: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.black),
+                  ),
+                ),
+              ),
+              ListTile(
+                onTap: () {
+                  Navigator.pushReplacement(context,
+                      MaterialPageRoute(builder: (context) => const AddUser()));
+                },
+                leading: const Icon(
+                  Icons.add,
+                  color: Colors.black,
+                ),
+                title: Text(
+                  "Add Details",
+                  style: GoogleFonts.aleo(
+                    textStyle: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.black),
+                  ),
+                ),
+              ),
+              ListTile(
+                onTap: () {
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const Settings()));
+                },
+                leading: const Icon(
+                  Icons.add,
+                  color: Colors.black,
+                ),
+                title: Text(
+                  "Settings",
                   style: GoogleFonts.aleo(
                     textStyle: const TextStyle(
                         fontSize: 18,
@@ -158,7 +186,7 @@ class HomePage extends StatelessWidget {
           padding: const EdgeInsets.all(12),
           child: Column(children: [
             SizedBox(
-              height: 435,
+              height: 440,
               child: GridView.builder(
                   itemCount: 4,
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -171,17 +199,52 @@ class HomePage extends StatelessWidget {
                       padding: const EdgeInsets.all(6.0),
                       child: InkWell(
                         onTap: () {
-                          if (items[index].name == "Show Members") {
+                          if (context
+                                  .read<ClubProvider>()
+                                  .getHomeCategories()[index]
+                                  .name ==
+                              "Show Members") {
                             Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => WorkesDetails()));
+                                    builder: (context) => const MembersInfo(
+                                          editorNot: false,
+                                        )));
                           }
-                          if (items[index].name == "Add Member") {
+                          if (context
+                                  .read<ClubProvider>()
+                                  .getHomeCategories()[index]
+                                  .name ==
+                              "Add Member") {
                             Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => const AddUser()));
+                                    builder: (context) => const UserinfoAdd(
+                                          member: null,
+                                          ismain: false,
+                                        )));
+                          }
+                          if (context
+                                  .read<ClubProvider>()
+                                  .getHomeCategories()[index]
+                                  .name ==
+                              "Edit Details") {
+                            Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => const MembersInfo(
+                                          editorNot: true,
+                                        )));
+                          }
+                          if (context
+                                  .read<ClubProvider>()
+                                  .getHomeCategories()[index]
+                                  .name ==
+                              "Settings") {
+                            Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => const Settings()));
                           }
                         },
                         child: Container(
@@ -204,12 +267,19 @@ class HomePage extends StatelessWidget {
                                     borderRadius: BorderRadius.circular(40),
                                     //color: items[index].color,
                                   ),
-                                  child: items[index].icon,
+                                  child: context
+                                      .read<ClubProvider>()
+                                      .getHomeCategories()[index]
+                                      .icon,
                                 ),
                                 const SizedBox(
                                   height: 25,
                                 ),
-                                Text(items[index].name,
+                                Text(
+                                    context
+                                        .read<ClubProvider>()
+                                        .getHomeCategories()[index]
+                                        .name,
                                     style: GoogleFonts.notoSansOsmanya(
                                         textStyle: const TextStyle(
                                       fontWeight: FontWeight.w500,
@@ -218,12 +288,33 @@ class HomePage extends StatelessWidget {
                                 const SizedBox(
                                   height: 10,
                                 ),
-                                Text(items[index].description,
-                                    style: GoogleFonts.notoSansOsmanya(
-                                        textStyle: TextStyle(
-                                      fontSize: 14,
-                                      color: Colors.grey[500],
-                                    ))),
+                                if (context
+                                        .read<ClubProvider>()
+                                        .getHomeCategories()[index]
+                                        .name ==
+                                    "Show Members")
+                                  Text(
+                                      "${context.read<ClubProvider>().getHomeCategories()[index].description} ${context.read<ClubProvider>().getMembersDetails().length}",
+                                      style: GoogleFonts.notoSansOsmanya(
+                                          textStyle: TextStyle(
+                                        fontSize: 14,
+                                        color: Colors.grey[500],
+                                      ))),
+                                if (context
+                                        .read<ClubProvider>()
+                                        .getHomeCategories()[index]
+                                        .name !=
+                                    "Show Members")
+                                  Text(
+                                      context
+                                          .read<ClubProvider>()
+                                          .getHomeCategories()[index]
+                                          .description,
+                                      style: GoogleFonts.notoSansOsmanya(
+                                          textStyle: TextStyle(
+                                        fontSize: 14,
+                                        color: Colors.grey[500],
+                                      ))),
                                 const SizedBox(
                                   height: 23,
                                 ),
@@ -237,7 +328,10 @@ class HomePage extends StatelessWidget {
                                       width: 30,
                                       decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(40),
-                                        color: items[index].color,
+                                        color: context
+                                            .read<ClubProvider>()
+                                            .getHomeCategories()[index]
+                                            .color,
                                       ),
                                     ),
                                   ],
@@ -275,7 +369,10 @@ class HomePage extends StatelessWidget {
                 height: 150,
                 child: Expanded(
                     child: ListView.builder(
-                        itemCount: mainmembers.length,
+                        itemCount: context
+                            .read<ClubProvider>()
+                            .getMainmembers()
+                            .length,
                         itemBuilder: (context, index) {
                           return Padding(
                             padding: const EdgeInsets.symmetric(vertical: 10),
@@ -291,7 +388,9 @@ class HomePage extends StatelessWidget {
                                   radius: 22,
                                   backgroundColor: colors[index],
                                   child: Text(
-                                    mainmembers[index]
+                                    context
+                                        .read<ClubProvider>()
+                                        .getMainmembers()[index]
                                         .name
                                         .substring(0, 2)
                                         .toUpperCase(),
@@ -301,8 +400,14 @@ class HomePage extends StatelessWidget {
                                         fontSize: 20),
                                   ),
                                 ),
-                                title: Text(mainmembers[index].name),
-                                subtitle: Text(mainmembers[index].number),
+                                title: Text(context
+                                    .read<ClubProvider>()
+                                    .getMainmembers()[index]
+                                    .name),
+                                subtitle: Text(context
+                                    .read<ClubProvider>()
+                                    .getMainmembers()[index]
+                                    .number),
                               ),
                             ),
                           );
