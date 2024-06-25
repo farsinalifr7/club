@@ -262,7 +262,10 @@ class _ContactsNumbersState extends State<ContactsNumbers> {
                                                                       .center,
                                                               children: [
                                                                 InkWell(
-                                                                  onTap: () {},
+                                                                  onTap: () {
+                                                                    Navigator.pop(
+                                                                        context);
+                                                                  },
                                                                   child:
                                                                       Container(
                                                                     decoration:
