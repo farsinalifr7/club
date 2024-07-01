@@ -1,9 +1,25 @@
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:club/pages/intro_page.dart';
 import 'package:club/provider/club_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 void main() {
+  AwesomeNotifications().initialize(
+    null,
+    [
+      NotificationChannel(
+        channelKey: "basic_channel",
+        channelName: "Notification",
+        channelDescription: "this is description",
+        // importance: NotificationImportance.High,
+        // soundSource: "resource://raw/notifi",
+        playSound: true,
+      )
+    ],
+    debug: true,
+  );
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(const MyApp());
 }
 

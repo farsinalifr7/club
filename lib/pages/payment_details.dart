@@ -1,5 +1,6 @@
 import 'package:club/main.dart';
 import 'package:club/model/user_model.dart';
+import 'package:club/pages/paymenttile.dart';
 import 'package:club/pages/settings.dart';
 import 'package:club/provider/club_provider.dart';
 import 'package:flutter/material.dart';
@@ -62,9 +63,12 @@ class PaymentDetails extends StatelessWidget {
                       const SizedBox(
                         height: 10,
                       ),
-                      const Text(
-                        "12",
-                        style: TextStyle(
+                      Text(
+                        context
+                            .read<ClubProvider>()
+                            .getNumberofpaid()
+                            .toString(),
+                        style: const TextStyle(
                             color: Colors.white,
                             fontSize: 33,
                             fontWeight: FontWeight.w800),
@@ -96,9 +100,14 @@ class PaymentDetails extends StatelessWidget {
                       const SizedBox(
                         height: 10,
                       ),
-                      const Text(
-                        "4",
-                        style: TextStyle(
+                      Text(
+                        (context
+                                    .read<ClubProvider>()
+                                    .getMembersDetails()
+                                    .length -
+                                context.read<ClubProvider>().getNumberofpaid())
+                            .toString(),
+                        style: const TextStyle(
                             color: Colors.white,
                             fontSize: 33,
                             fontWeight: FontWeight.w800),
@@ -149,38 +158,56 @@ class PaymentDetails extends StatelessWidget {
                     itemBuilder: (context, index) {
                       return Padding(
                         padding: const EdgeInsets.symmetric(vertical: 10),
-                        child: Container(
-                          height: 70,
-                          width: MediaQuery.of(context).size.width,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(8),
-                            //color: Colors.white,
-                          ),
-                          child: ListTile(
-                            leading: CircleAvatar(
-                              radius: 22,
-                              backgroundColor: colors[index].withOpacity(0.8),
-                              child: Text(
-                                context
-                                    .read<ClubProvider>()
-                                    .getMembersDetails()[index]
-                                    .name
-                                    .substring(0, 2)
-                                    .toUpperCase(),
-                                style: const TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 20),
+                        child: InkWell(
+                          onTap: () {
+                            Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => Paymenttile(
+                                          number: index,
+                                          member: context
+                                              .read<ClubProvider>()
+                                              .getMembersDetails()[index],
+                                        )));
+                          },
+                          child: Container(
+                            height: 70,
+                            width: MediaQuery.of(context).size.width,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(8),
+                              //color: Colors.white,
+                            ),
+                            child: ListTile(
+                              // leading: CircleAvatar(
+                              //   radius: 22,
+                              //   backgroundColor: colors[index].withOpacity(0.8),
+                              //   child: Text(
+                              //     context
+                              //         .read<ClubProvider>()
+                              //         .getMembersDetails()[index]
+                              //         .name
+                              //         .substring(0, 2)
+                              //         .toUpperCase(),
+                              //     style: const TextStyle(
+                              //         color: Colors.white,
+                              //         fontWeight: FontWeight.w600,
+                              //         fontSize: 20),
+                              //   ),
+                              // ),
+                              title: Text(context
+                                  .read<ClubProvider>()
+                                  .getMembersDetails()[index]
+                                  .name),
+                              subtitle: Text(context
+                                  .read<ClubProvider>()
+                                  .getMembersDetails()[index]
+                                  .mob),
+                              trailing: Icon(
+                                Icons.arrow_forward_ios,
+                                color: Colors.grey[400],
+                                size: 15,
                               ),
                             ),
-                            title: Text(context
-                                .read<ClubProvider>()
-                                .getMembersDetails()[index]
-                                .name),
-                            subtitle: Text(context
-                                .read<ClubProvider>()
-                                .getMembersDetails()[index]
-                                .mob),
                           ),
                         ),
                       );

@@ -1,9 +1,9 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-class NotificationModel {
+class NotifiModel {
   final DateTime time;
   final String title;
   final String description;
-  NotificationModel({
+  NotifiModel({
     required this.time,
     required this.title,
     required this.description,

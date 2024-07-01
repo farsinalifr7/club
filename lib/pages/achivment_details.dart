@@ -173,8 +173,9 @@ class AchivmentDetails extends StatelessWidget {
                             ],
                             color: colors[index].withOpacity(0.7),
                             borderRadius: const BorderRadius.only(
-                                topRight: Radius.circular(40),
-                                bottomLeft: Radius.circular(40)),
+                                // topRight: Radius.circular(40),
+                                //bottomLeft: Radius.circular(40)
+                                ),
                           ),
                           child: Container(
                             child: Column(

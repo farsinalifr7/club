@@ -1,6 +1,7 @@
 import 'package:club/model/category.dart';
 import 'package:club/model/main_member_model.dart';
 import 'package:club/model/notification_model.dart';
+import 'package:club/model/paymentmodel.dart';
 import 'package:club/model/user_model.dart';
 import 'package:flutter/material.dart';
 
@@ -55,53 +56,83 @@ class ClubProvider extends ChangeNotifier {
   // member details
   List<Workers> workerList = [
     Workers(
+        payment: [
+          Paymentmodel(Year: "2022", first: true, second: false),
+          Paymentmodel(Year: "2023", first: true, second: true),
+          Paymentmodel(Year: "2024", first: true, second: false),
+        ],
         isUserInput: false,
         name: "Ajnas",
         mob: "930344542",
         image: "asset/images/peson1-removebg-preview.png",
-        age: "24"),
+        age: DateTime(1999, 5, 23)),
     Workers(
+        payment: [
+          Paymentmodel(Year: "2022", first: false, second: false),
+          Paymentmodel(Year: "2023", first: true, second: true),
+          Paymentmodel(Year: "2024", first: true, second: true),
+        ],
         isUserInput: false,
         name: "Ameer",
         mob: "966454562",
         image: "asset/images/person2-removebg-preview.png",
-        age: "26"),
+        age: DateTime(1997, 10, 26)),
     Workers(
+        payment: [
+          Paymentmodel(Year: "2022", first: true, second: true),
+          Paymentmodel(Year: "2023", first: true, second: true),
+          Paymentmodel(Year: "2024", first: true, second: true),
+        ],
         isUserInput: false,
         name: "Ansy",
         mob: "99563179",
         image: "asset/images/person3-removebg-preview.png",
-        age: "28"),
+        age: DateTime(1990, 1, 13)),
     Workers(
+        payment: [
+          Paymentmodel(Year: "2022", first: false, second: true),
+          Paymentmodel(Year: "2023", first: false, second: true),
+          Paymentmodel(Year: "2024", first: true, second: true),
+        ],
         isUserInput: false,
         name: "Nishana",
         mob: "95656764",
         image: "asset/images/person4-removebg-preview.png",
-        age: "32"),
+        age: DateTime(2000, 6, 27)),
     Workers(
+        payment: [
+          Paymentmodel(Year: "2022", first: true, second: true),
+          Paymentmodel(Year: "2023", first: true, second: true),
+          Paymentmodel(Year: "2024", first: true, second: true),
+        ],
         isUserInput: false,
         name: "Masood",
         mob: "99563179",
         image: "asset/images/person5-removebg-preview.png",
-        age: "32"),
+        age: DateTime(1999, 4, 23)),
     Workers(
+        payment: [
+          Paymentmodel(Year: "2022", first: true, second: true),
+          Paymentmodel(Year: "2023", first: true, second: true),
+          Paymentmodel(Year: "2024", first: false, second: false),
+        ],
         isUserInput: false,
         name: "Akshay",
         mob: "623566339",
         image: "asset/images/person6-removebg-preview.png",
-        age: "30"),
+        age: DateTime(1994, 6, 6)),
   ];
 
-  List<NotificationModel> notifications = [
-    NotificationModel(
+  List<NotifiModel> notifications = [
+    NotifiModel(
         time: DateTime.now(),
         title: "FoodBall Match",
         description: "foodBall Match contectod in vengara turf "),
-    NotificationModel(
+    NotifiModel(
         time: DateTime.now(),
         title: "Cricket Match",
         description: "Cricket Match contectod in vengara turf "),
-    NotificationModel(
+    NotifiModel(
         time: DateTime.now(), title: "Rent", description: "Rs 400 Club rent "),
   ];
 
@@ -111,6 +142,13 @@ class ClubProvider extends ChangeNotifier {
     MainMember(name: "Kottakkal", number: "5753689765"),
     MainMember(name: "kannattipadi", number: "9675432064")
   ];
+
+  // addorupdate payment
+  void updateorEditpayment(index, item) {
+    workerList[index] = item;
+    notifyListeners();
+  }
+
   // get list of Contacts
   List<MainMember> getContacts() {
     return contacts;
@@ -132,7 +170,22 @@ class ClubProvider extends ChangeNotifier {
   List<String> achivments = [
     "Win PS1",
     "Runner Up PS2",
+    "win PS3",
   ];
+  // get payment paid and remiding
+  int getNumberofpaid() {
+    int count = 0;
+    for (int i = 0; i < workerList.length; i++) {
+      if (workerList[i].payment[workerList[i].payment.length - 1].first ==
+          true) {
+        count++;
+      }
+    }
+    print("------------------------------");
+    print(count);
+    return count;
+  }
+
 // get list of achievement
   List<String> getAchivment() {
     return achivments;
@@ -193,18 +246,18 @@ class ClubProvider extends ChangeNotifier {
 
 //........................Notifications...................................
   // get notifications from the list
-  List<NotificationModel> getNotifications() {
+  List<NotifiModel> getNotifications() {
     return notifications;
   }
 
   // add notification to the list
-  void addNotification(NotificationModel item) {
+  void addNotification(NotifiModel item) {
     notifications.add(item);
     notifyListeners();
   }
 
   // remove notification from the list
-  void removeNotification(NotificationModel item) {
+  void removeNotification(NotifiModel item) {
     notifications.remove(item);
     notifyListeners();
   }

@@ -184,7 +184,7 @@ class _ContactsNumbersState extends State<ContactsNumbers> {
         ),
       ),
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 25),
+        padding: const EdgeInsets.symmetric(horizontal: 5),
         child: Consumer<ClubProvider>(builder: (_, value, __) {
           return Column(
             children: [
@@ -193,7 +193,7 @@ class _ContactsNumbersState extends State<ContactsNumbers> {
                     itemCount: value.getContacts().length,
                     itemBuilder: (context, index) {
                       return Padding(
-                        padding: const EdgeInsets.all(12.0),
+                        padding: const EdgeInsets.symmetric(vertical: 5),
                         child: Container(
                           height: 155,
                           width: double.infinity,
@@ -203,183 +203,190 @@ class _ContactsNumbersState extends State<ContactsNumbers> {
                           child: Padding(
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 20, vertical: 10),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
+                            child: Row(
                               children: [
-                                const SizedBox(
-                                  height: 15,
-                                ),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Align(
-                                      alignment: Alignment.centerLeft,
-                                      child: CircleAvatar(
-                                        radius: 27,
-                                        backgroundColor:
-                                            colors[index].withOpacity(0.8),
-                                        child: const Center(
-                                          child: Icon(
-                                            Icons.phone,
-                                            color: Colors.white,
-                                            size: 35,
-                                          ),
-                                        ),
+                                Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: CircleAvatar(
+                                    radius: 27,
+                                    backgroundColor:
+                                        colors[index].withOpacity(0.4),
+                                    child: Center(
+                                      child: Icon(
+                                        Icons.phone,
+                                        color: colors[index],
+                                        size: 35,
                                       ),
                                     ),
-                                    IconButton(
-                                        onPressed: () {
-                                          showDialog(
-                                              context: context,
-                                              builder: (context) {
-                                                return Consumer<ClubProvider>(
-                                                    builder: (_, value, __) {
-                                                  return AlertDialog(
-                                                      title: const Center(
-                                                        child: Text(
-                                                          "Alert Message",
-                                                          style: TextStyle(
-                                                              color:
-                                                                  Colors.grey,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w400),
+                                  ),
+                                ),
+                                const SizedBox(
+                                  width: 30,
+                                ),
+                                SizedBox(
+                                  width: 150,
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      const SizedBox(
+                                        height: 40,
+                                      ),
+                                      Text(
+                                        value.getContacts()[index].name,
+                                        style: const TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 22,
+                                            fontWeight: FontWeight.w400),
+                                      ),
+                                      Text(
+                                        value.getContacts()[index].number,
+                                        style: GoogleFonts.aleo(
+                                          textStyle: const TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.w500,
+                                              color: Colors.grey),
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                                IconButton(
+                                    onPressed: () {
+                                      showDialog(
+                                          context: context,
+                                          builder: (context) {
+                                            return Consumer<ClubProvider>(
+                                                builder: (_, value, __) {
+                                              return AlertDialog(
+                                                  title: const Center(
+                                                    child: Text(
+                                                      "Alert Message",
+                                                      style: TextStyle(
+                                                          color: Colors.grey,
+                                                          fontWeight:
+                                                              FontWeight.w400),
+                                                    ),
+                                                  ),
+                                                  content: Column(
+                                                      mainAxisSize:
+                                                          MainAxisSize.min,
+                                                      children: [
+                                                        const Text(
+                                                            "Do you Want to Delete this Contact ?"),
+                                                        const SizedBox(
+                                                          height: 15,
                                                         ),
-                                                      ),
-                                                      content: Column(
-                                                          mainAxisSize:
-                                                              MainAxisSize.min,
+                                                        Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .center,
                                                           children: [
-                                                            const Text(
-                                                                "Do you Want to Delete this Contact ?"),
-                                                            const SizedBox(
-                                                              height: 15,
-                                                            ),
-                                                            Row(
-                                                              mainAxisAlignment:
-                                                                  MainAxisAlignment
-                                                                      .center,
-                                                              children: [
-                                                                InkWell(
-                                                                  onTap: () {
-                                                                    Navigator.pop(
-                                                                        context);
-                                                                  },
-                                                                  child:
-                                                                      Container(
-                                                                    decoration:
-                                                                        BoxDecoration(
-                                                                      borderRadius:
-                                                                          BorderRadius.circular(
+                                                            InkWell(
+                                                              onTap: () {
+                                                                Navigator.pop(
+                                                                    context);
+                                                              },
+                                                              child: Container(
+                                                                decoration:
+                                                                    BoxDecoration(
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
                                                                               12),
+                                                                  color: Colors
+                                                                          .lightBlue[
+                                                                      900],
+                                                                ),
+                                                                height: 35,
+                                                                width: 80,
+                                                                child:
+                                                                    const Center(
+                                                                        child:
+                                                                            Text(
+                                                                  "Cancel",
+                                                                  style: TextStyle(
                                                                       color: Colors
-                                                                              .lightBlue[
-                                                                          900],
-                                                                    ),
-                                                                    height: 35,
-                                                                    width: 80,
-                                                                    child: const Center(
-                                                                        child: Text(
-                                                                      "Cancel",
-                                                                      style: TextStyle(
-                                                                          color: Colors
-                                                                              .white,
-                                                                          fontWeight: FontWeight
+                                                                          .white,
+                                                                      fontWeight:
+                                                                          FontWeight
                                                                               .w500,
-                                                                          fontSize:
-                                                                              16),
-                                                                    )),
-                                                                  ),
-                                                                ),
-                                                                const SizedBox(
-                                                                  width: 20,
-                                                                ),
-                                                                InkWell(
-                                                                  onTap: () {
-                                                                    value.removeContacts(
-                                                                        value.getContacts()[
-                                                                            index]);
+                                                                      fontSize:
+                                                                          16),
+                                                                )),
+                                                              ),
+                                                            ),
+                                                            const SizedBox(
+                                                              width: 20,
+                                                            ),
+                                                            InkWell(
+                                                              onTap: () {
+                                                                value.removeContacts(
+                                                                    value.getContacts()[
+                                                                        index]);
 
-                                                                    ScaffoldMessenger.of(
-                                                                            context)
-                                                                        .showSnackBar(
-                                                                            const SnackBar(
-                                                                      content:
-                                                                          Text(
-                                                                        "Contacts Deleted Successfully!",
-                                                                        style: TextStyle(
-                                                                            color:
-                                                                                Colors.white),
-                                                                      ),
-                                                                      backgroundColor:
-                                                                          Colors
-                                                                              .black,
-                                                                      duration: Duration(
+                                                                ScaffoldMessenger.of(
+                                                                        context)
+                                                                    .showSnackBar(
+                                                                        const SnackBar(
+                                                                  content: Text(
+                                                                    "Contacts Deleted Successfully!",
+                                                                    style: TextStyle(
+                                                                        color: Colors
+                                                                            .white),
+                                                                  ),
+                                                                  backgroundColor:
+                                                                      Colors
+                                                                          .black,
+                                                                  duration:
+                                                                      Duration(
                                                                           seconds:
                                                                               1),
-                                                                    ));
-                                                                    Navigator.pop(
-                                                                        context);
-                                                                  },
-                                                                  child:
-                                                                      Container(
-                                                                    decoration:
-                                                                        BoxDecoration(
-                                                                      borderRadius:
-                                                                          BorderRadius.circular(
+                                                                ));
+                                                                Navigator.pop(
+                                                                    context);
+                                                              },
+                                                              child: Container(
+                                                                decoration:
+                                                                    BoxDecoration(
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
                                                                               12),
-                                                                      color: Colors
-                                                                          .purple,
-                                                                    ),
-                                                                    height: 35,
-                                                                    width: 80,
-                                                                    child: const Center(
-                                                                        child: Text(
-                                                                      "Delete",
-                                                                      style: TextStyle(
-                                                                          color: Colors
-                                                                              .white,
-                                                                          fontWeight: FontWeight
-                                                                              .w500,
-                                                                          fontSize:
-                                                                              16),
-                                                                    )),
-                                                                  ),
+                                                                  color: Colors
+                                                                      .purple,
                                                                 ),
-                                                              ],
+                                                                height: 35,
+                                                                width: 80,
+                                                                child:
+                                                                    const Center(
+                                                                        child:
+                                                                            Text(
+                                                                  "Delete",
+                                                                  style: TextStyle(
+                                                                      color: Colors
+                                                                          .white,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .w500,
+                                                                      fontSize:
+                                                                          16),
+                                                                )),
+                                                              ),
                                                             ),
-                                                            const SizedBox(
-                                                              height: 10,
-                                                            ),
-                                                          ]));
-                                                });
-                                              });
-                                        },
-                                        icon: const Icon(
-                                          Icons.close,
-                                          color: Colors.grey,
-                                        ))
-                                  ],
-                                ),
-                                Text(
-                                  value.getContacts()[index].name,
-                                  style: GoogleFonts.aleo(
-                                    textStyle: const TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.w500,
-                                        color: Colors.black),
-                                  ),
-                                ),
-                                Text(
-                                  value.getContacts()[index].number,
-                                  style: GoogleFonts.aleo(
-                                    textStyle: const TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w500,
-                                        color: Colors.grey),
-                                  ),
-                                )
+                                                          ],
+                                                        ),
+                                                        const SizedBox(
+                                                          height: 10,
+                                                        ),
+                                                      ]));
+                                            });
+                                          });
+                                    },
+                                    icon: const Icon(
+                                      Icons.close,
+                                      color: Colors.grey,
+                                    )),
                               ],
                             ),
                           ),

@@ -4,7 +4,9 @@ import 'dart:io';
 import 'package:club/main.dart';
 import 'package:club/model/main_member_model.dart';
 import 'package:club/model/user_model.dart';
+import 'package:club/pages/show_members.dart';
 import 'package:club/provider/club_provider.dart';
+import 'package:date_format/date_format.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -27,6 +29,7 @@ class UserinfoAdd extends StatefulWidget {
 }
 
 class _UserinfoAddState extends State<UserinfoAdd> {
+  DateTime? selectedDate = DateTime.now();
   String useruplodedimagepath = "";
   String SaveOrUpdate = "Save";
   final TextEditingController _controllerName = TextEditingController();
@@ -55,34 +58,184 @@ class _UserinfoAddState extends State<UserinfoAdd> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.purple,
+        backgroundColor: Colors.purple[400],
         body: Column(
           children: [
             Expanded(
                 flex: 2,
                 child: SingleChildScrollView(
                   child: Container(
-                    decoration: const BoxDecoration(color: Colors.purple),
+                    decoration: BoxDecoration(color: Colors.purple[400]),
                     child: Column(
                       // crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const SizedBox(
                           height: 35,
                         ),
-                        Align(
-                          alignment: Alignment.centerLeft,
-                          child: IconButton(
-                              onPressed: () {
-                                Navigator.pushReplacement(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => HomePage()));
-                              },
-                              icon: Icon(
-                                Icons.arrow_back_ios,
-                                color: Colors.grey[200],
-                                size: 30,
-                              )),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Align(
+                              alignment: Alignment.centerLeft,
+                              child: IconButton(
+                                  onPressed: () {
+                                    Navigator.pushReplacement(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => HomePage()));
+                                  },
+                                  icon: Icon(
+                                    Icons.arrow_back_ios,
+                                    color: Colors.grey[200],
+                                    size: 30,
+                                  )),
+                            ),
+                            if (widget.ismain == false && widget.member != null)
+                              IconButton(
+                                onPressed: () {
+                                  showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        return Consumer<ClubProvider>(
+                                            builder: (_, value, __) {
+                                          return AlertDialog(
+                                              title: const Text(
+                                                "Alert Message",
+                                                style: TextStyle(
+                                                    color: Colors.black,
+                                                    fontWeight:
+                                                        FontWeight.w400),
+                                              ),
+                                              content: Column(
+                                                  mainAxisSize:
+                                                      MainAxisSize.min,
+                                                  children: [
+                                                    const SizedBox(
+                                                      height: 5,
+                                                    ),
+                                                    const Text(
+                                                        "Do you want to delete this Member ?"),
+                                                    const SizedBox(
+                                                      height: 15,
+                                                    ),
+                                                    Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
+                                                      children: [
+                                                        InkWell(
+                                                          onTap: () {
+                                                            Navigator.pop(
+                                                                context);
+                                                          },
+                                                          child: Container(
+                                                            decoration:
+                                                                BoxDecoration(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          12),
+                                                              color: Colors
+                                                                      .lightBlue[
+                                                                  900],
+                                                            ),
+                                                            height: 35,
+                                                            width: 80,
+                                                            child: const Center(
+                                                                child: Text(
+                                                              "Cancel",
+                                                              style: TextStyle(
+                                                                  color: Colors
+                                                                      .white,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w500,
+                                                                  fontSize: 16),
+                                                            )),
+                                                          ),
+                                                        ),
+                                                        const SizedBox(
+                                                          width: 20,
+                                                        ),
+                                                        InkWell(
+                                                          onTap: () {
+                                                            context
+                                                                .read<
+                                                                    ClubProvider>()
+                                                                .removeMembersDetails(
+                                                                    widget
+                                                                        .member!);
+
+                                                            ScaffoldMessenger
+                                                                    .of(context)
+                                                                .showSnackBar(
+                                                                    const SnackBar(
+                                                              content: Text(
+                                                                "Member Deleted Successfully!",
+                                                                style: TextStyle(
+                                                                    color: Colors
+                                                                        .white),
+                                                              ),
+                                                              backgroundColor:
+                                                                  Colors.black,
+                                                              duration:
+                                                                  Duration(
+                                                                      seconds:
+                                                                          1),
+                                                            ));
+                                                            Navigator.pop(
+                                                                context);
+                                                            Navigator
+                                                                .pushReplacement(
+                                                                    context,
+                                                                    MaterialPageRoute(
+                                                                        builder: (context) =>
+                                                                            const MembersInfo(
+                                                                              editorNot: false,
+                                                                            )));
+                                                          },
+                                                          child: Container(
+                                                            decoration: BoxDecoration(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            12),
+                                                                color: Colors
+                                                                    .purple),
+                                                            height: 35,
+                                                            width: 80,
+                                                            child: const Center(
+                                                                child: Text(
+                                                              "Delete",
+                                                              style: TextStyle(
+                                                                  color: Colors
+                                                                      .white,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w500,
+                                                                  fontSize: 16),
+                                                            )),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    const SizedBox(
+                                                      height: 10,
+                                                    ),
+                                                  ]));
+                                        });
+                                      });
+                                  //...........................
+
+                                  //........................................
+                                },
+                                icon: Icon(
+                                  Icons.delete,
+                                  color: Colors.grey[200],
+                                  size: 30,
+                                ),
+                              ),
+                          ],
                         ),
                         Text(
                             widget.member == null
@@ -135,11 +288,10 @@ class _UserinfoAddState extends State<UserinfoAdd> {
                               child: Text(
                                 "Tell us about yourself",
                                 style: GoogleFonts.aleo(
-                                  textStyle: TextStyle(
+                                  textStyle: const TextStyle(
                                       fontSize: 25,
                                       fontWeight: FontWeight.w600,
-                                      color:
-                                          Colors.deepPurple.withOpacity(0.8)),
+                                      color: Colors.grey),
                                 ),
                               ),
                             ),
@@ -191,30 +343,50 @@ class _UserinfoAddState extends State<UserinfoAdd> {
                                 )),
                           ),
                           const SizedBox(
-                            height: 20,
+                            height: 5,
                           ),
                           if (widget.ismain == false)
-                            TextField(
-                              keyboardType: TextInputType.number,
-                              controller: _controllerAddress,
-                              style: const TextStyle(color: Colors.black),
-                              decoration: const InputDecoration(
-                                  hintText: 'Age',
-                                  enabledBorder: UnderlineInputBorder(
-                                    borderSide: BorderSide(color: Colors.grey),
-                                  ),
-                                  focusedBorder: UnderlineInputBorder(
-                                    borderSide: BorderSide(color: Colors.grey),
-                                  ),
-                                  border: UnderlineInputBorder(
-                                    borderSide: BorderSide(
-                                      color: Colors.grey,
+                            InkWell(
+                              onTap: () {
+                                showDatePicker(
+                                  context: context,
+                                  initialDate: DateTime.now(),
+                                  firstDate: DateTime(2023, 1, 1),
+                                  lastDate: DateTime(2024, 12, 31),
+                                ).then((value) {
+                                  setState(() {
+                                    selectedDate = value!;
+                                  });
+                                });
+                              },
+                              child: Container(
+                                height: 55,
+                                width: double.infinity,
+                                decoration: const BoxDecoration(
+                                    //borderRadius: BorderRadius.circular(5),
+                                    // border: Border.only(color: Colors.grey)
                                     ),
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 8, vertical: 15),
+                                  child: Text(
+                                    " ${formatDate(selectedDate!, [
+                                          yyyy,
+                                          '/',
+                                          mm,
+                                          '/',
+                                          dd
+                                        ]).toString()}",
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        color: Colors.black.withOpacity(0.7)),
                                   ),
-                                  hintStyle: TextStyle(
-                                    color: Colors.grey,
-                                    fontWeight: FontWeight.w500,
-                                  )),
+                                ),
+                              ),
+                            ),
+                          if (widget.ismain == false)
+                            const Divider(
+                              color: Colors.grey,
                             ),
                           const SizedBox(
                             height: 20,
@@ -319,12 +491,13 @@ class _UserinfoAddState extends State<UserinfoAdd> {
                                       .read<ClubProvider>()
                                       .updateMembersDetails(
                                           Workers(
+                                              payment: [],
                                               isUserInput:
                                                   widget.member!.isUserInput,
                                               name: _controllerName.text,
                                               mob: _controllerNumber.text,
                                               image: useruplodedimagepath,
-                                              age: _controllerAddress.text),
+                                              age: selectedDate!),
                                           index1);
                                   ScaffoldMessenger.of(context)
                                       .showSnackBar(const SnackBar(
@@ -340,11 +513,12 @@ class _UserinfoAddState extends State<UserinfoAdd> {
                                   context
                                       .read<ClubProvider>()
                                       .addMembersDetails(Workers(
+                                          payment: [],
                                           isUserInput: true,
                                           name: _controllerName.text,
                                           mob: _controllerNumber.text,
                                           image: useruplodedimagepath,
-                                          age: _controllerAddress.text));
+                                          age: selectedDate!));
                                   ScaffoldMessenger.of(context)
                                       .showSnackBar(const SnackBar(
                                     content: Text(
@@ -366,7 +540,7 @@ class _UserinfoAddState extends State<UserinfoAdd> {
                               height: 55,
                               width: 290,
                               decoration: BoxDecoration(
-                                color: Colors.teal.withOpacity(0.7),
+                                color: Colors.deepPurple.withOpacity(0.7),
                                 borderRadius: const BorderRadius.all(
                                   Radius.circular(12),
                                 ),
@@ -399,7 +573,7 @@ class _UserinfoAddState extends State<UserinfoAdd> {
           .indexOf(widget.member!);
       _controllerName.text = widget.member!.name;
       _controllerNumber.text = widget.member!.mob;
-      _controllerAddress.text = widget.member!.age;
+      selectedDate = widget.member!.age;
       SaveOrUpdate = "Update";
       useruplodedimagepath = widget.member!.image;
     }

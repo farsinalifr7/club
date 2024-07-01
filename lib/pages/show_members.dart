@@ -5,6 +5,7 @@ import 'package:club/model/user_model.dart';
 import 'package:club/pages/home_page.dart';
 import 'package:club/pages/userinfo_add.dart';
 import 'package:club/provider/club_provider.dart';
+import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -107,14 +108,14 @@ class _MembersInfoState extends State<MembersInfo> {
                         child: Container(
                           height: 85,
                           decoration: BoxDecoration(
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black.withOpacity(0.1),
-                                  offset: const Offset(3, 3),
-                                  blurRadius: 3,
-                                  spreadRadius: 1,
-                                ),
-                              ],
+                              // boxShadow: [
+                              //   BoxShadow(
+                              //     color: Colors.black.withOpacity(0.1),
+                              //     offset: const Offset(3, 3),
+                              //     blurRadius: 3,
+                              //     spreadRadius: 1,
+                              //   ),
+                              // ],
                               color: Colors.white,
                               borderRadius: BorderRadius.circular(15)),
                           child: Column(
@@ -173,7 +174,13 @@ class _MembersInfoState extends State<MembersInfo> {
                                                     color: Colors.grey[600]),
                                               ),
                                               Text(
-                                                "${filtetItems[index].age} ",
+                                                "${formatDate(filtetItems[index].age, [
+                                                      yyyy,
+                                                      '/',
+                                                      mm,
+                                                      '/',
+                                                      dd
+                                                    ]).toString()} ",
                                                 style: const TextStyle(
                                                     color: Colors.grey),
                                               ),

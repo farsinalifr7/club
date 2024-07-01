@@ -1,6 +1,9 @@
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:club/model/notification_model.dart';
+//import 'package:club/model/notification_model.dart';
 import 'package:club/pages/settings.dart';
 import 'package:club/provider/club_provider.dart';
+import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -18,6 +21,33 @@ class _Notification1State extends State<Notification1> {
   final TextEditingController _controllerDescription = TextEditingController();
 
   DateTime selectedDate = DateTime.now();
+  DateTime _selectedDateTime = DateTime.now();
+
+  Future<void> _selectDateTime(BuildContext context) async {
+    final DateTime? datePicked = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2101),
+    );
+    if (datePicked != null) {
+      final TimeOfDay? timePicked = await showTimePicker(
+        context: context,
+        initialTime: TimeOfDay.now(),
+      );
+      if (timePicked != null) {
+        setState(() {
+          _selectedDateTime = DateTime(
+            datePicked.year,
+            datePicked.month,
+            datePicked.day,
+            timePicked.hour,
+            timePicked.minute,
+          );
+        });
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -76,16 +106,17 @@ class _Notification1State extends State<Notification1> {
                           ),
                           InkWell(
                             onTap: () {
-                              showDatePicker(
-                                context: context,
-                                initialDate: DateTime.now(),
-                                firstDate: DateTime(2023, 1, 1),
-                                lastDate: DateTime(2024, 12, 31),
-                              ).then((value) {
-                                setState(() {
-                                  selectedDate = value!;
-                                });
-                              });
+                              _selectDateTime(context);
+                              // showDatePicker(
+                              //   context: context,
+                              //   initialDate: DateTime.now(),
+                              //   firstDate: DateTime(2023, 1, 1),
+                              //   lastDate: DateTime(2024, 12, 31),
+                              // ).then((value) {
+                              //   setState(() {
+                              //     selectedDate = value!;
+                              //   });
+                              // });
                             },
                             child: Container(
                               height: 55,
@@ -98,7 +129,17 @@ class _Notification1State extends State<Notification1> {
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 8, vertical: 15),
                                 child: Text(
-                                  selectedDate.toString(),
+                                  " ${formatDate(_selectedDateTime, [
+                                        yyyy,
+                                        '/',
+                                        mm,
+                                        '/',
+                                        dd,
+                                        " ",
+                                        hh,
+                                        ':',
+                                        nn,
+                                      ]).toString()}",
                                   style: TextStyle(
                                       fontSize: 16,
                                       color: Colors.black.withOpacity(0.7)),
@@ -139,9 +180,14 @@ class _Notification1State extends State<Notification1> {
                               ),
                               InkWell(
                                 onTap: () {
+                                  scheduleNotification(NotifiModel(
+                                      time: _selectedDateTime,
+                                      title: _controllerTitle.text,
+                                      description:
+                                          _controllerDescription.text));
                                   value.addNotification(
-                                    NotificationModel(
-                                        time: selectedDate ?? DateTime.now(),
+                                    NotifiModel(
+                                        time: _selectedDateTime,
                                         title: _controllerTitle.text,
                                         description:
                                             _controllerDescription.text),
@@ -400,7 +446,17 @@ class _Notification1State extends State<Notification1> {
                                 ),
                               ),
                               Text(
-                                value.getNotifications()[index].time.toString(),
+                                "${formatDate(value.getNotifications()[index].time, [
+                                      yyyy,
+                                      '/',
+                                      mm,
+                                      '/',
+                                      dd,
+                                      ' ',
+                                      hh,
+                                      ':',
+                                      nn,
+                                    ]).toString()} ",
                                 style: GoogleFonts.aleo(
                                   textStyle: const TextStyle(
                                       fontSize: 16,
@@ -422,5 +478,28 @@ class _Notification1State extends State<Notification1> {
   void clear() {
     _controllerDescription.text = "";
     _controllerTitle.text = "";
+  }
+
+  void scheduleNotification(NotifiModel item) async {
+    try {
+      await AwesomeNotifications().createNotification(
+        content: NotificationContent(
+          id: DateTime.now().minute,
+          channelKey: 'basic_channel',
+          title: item.title,
+          body: item.description,
+
+          //customSound: "resource:asset/sound/notificationsound.mp3",
+          payload: {
+            'scheduledTime': item.time.toString(),
+          }, // Optional payload
+        ),
+        schedule: NotificationCalendar.fromDate(
+          date: item.time,
+          allowWhileIdle: true, // Allow notification even if app is idle
+          preciseAlarm: true, // Use precise alarm for accurate scheduling
+        ),
+      );
+    } catch (e) {}
   }
 }
